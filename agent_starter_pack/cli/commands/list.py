@@ -122,7 +122,7 @@ def list_remote_agents(remote_source: str) -> None:
 
     console.print(f"\nFetching agents from [bold blue]{remote_source}[/]...")
 
-    temp_root: str | None = None
+    temp_dir: pathlib.Path | None = None
     try:
         # fetch_remote_template returns (template_dir, temp_dir): the directory
         # inside the clone that matches the requested template path, plus the
@@ -130,7 +130,6 @@ def list_remote_agents(remote_source: str) -> None:
         # spec has no sub-path (e.g. the adk-samples repo itself) template_dir is
         # the clone root.
         template_dir, temp_dir = fetch_remote_template(spec)
-        temp_root = str(temp_dir)
 
         # Check if this is ADK samples to enable inference
         is_adk_samples = (
@@ -145,8 +144,8 @@ def list_remote_agents(remote_source: str) -> None:
         console.print(f"Error: {e}", style="bold red")
     finally:
         # The clone is only needed while the table is being built.
-        if temp_root:
-            shutil.rmtree(temp_root, ignore_errors=True)
+        if temp_dir:
+            shutil.rmtree(temp_dir, ignore_errors=True)
 
 
 @click.command("list")
